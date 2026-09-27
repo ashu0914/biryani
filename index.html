@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Biryani Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FCF3E3; --card:#FFFDF8; --maroon:#6B1E2B; --saffron:#E8952B;
+  --chili:#C1440E; --mint:#4C7A5D; --ink:#2B1810; --line:#EAD9BE;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --cream:#20140F; --card:#2B1B14; --ink:#F3E6D8; --line:#4A3323; }
+}
+:root[data-theme="dark"]{ --cream:#20140F; --card:#2B1B14; --ink:#F3E6D8; --line:#4A3323; }
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+body{ margin:0; background:var(--cream); color:var(--ink); font-family:'Poppins', system-ui, -apple-system, sans-serif; min-height:100%; transition:background .3s; }
+h1,h2,h3,.display{font-family:'Baloo 2', 'Poppins', system-ui, sans-serif;}
+.wrap{max-width:640px; margin:0 auto; padding:0 20px 60px;}
+header.top{ position:sticky; top:0; z-index:5; background:var(--cream); padding:calc(env(safe-area-inset-top,0px) + 10px) 20px 10px; border-bottom:1px solid var(--line); }
+.topbar{max-width:640px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.brand{font-family:'Baloo 2'; font-weight:800; font-size:1.15rem; color:var(--maroon); display:flex; gap:8px; align-items:center;}
+.iconbtn{ border:1px solid var(--line); background:var(--card); color:var(--ink); width:40px; height:40px; border-radius:50%; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.dots{display:flex; gap:6px; margin-top:10px; overflow-x:auto; max-width:640px; margin-left:auto; margin-right:auto; padding-bottom:2px;}
+.dot{ flex:1; min-width:0; height:8px; border-radius:5px; background:var(--line); cursor:pointer; border:none; }
+.dot.done{background:var(--mint);} .dot.active{background:var(--chili);}
+.hero{text-align:center; padding:30px 0 10px;}
+.hero .icon-row{display:flex; gap:14px; justify-content:center; margin-bottom:8px;}
+.hero h1{font-size:2rem; margin:6px 0; color:var(--maroon);}
+.hero p{opacity:.85; line-height:1.5; max-width:46ch; margin:0 auto 20px;}
+.pts{font-family:'Baloo 2'; font-weight:700; color:var(--chili); font-size:.95rem;}
+button.cta{ background:var(--chili); color:#fff; border:none; padding:14px 26px; border-radius:14px; font-family:'Baloo 2'; font-weight:700; font-size:1.05rem; cursor:pointer; box-shadow:0 4px 0 #8f3009; }
+button.cta:active{transform:translateY(3px); box-shadow:0 1px 0 #8f3009;}
+.card{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:24px; margin-top:18px; }
+.stagehead{display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+.stagehead .num{ width:34px; height:34px; border-radius:50%; background:var(--saffron); color:#fff; display:flex; align-items:center; justify-content:center; font-family:'Baloo 2'; font-weight:700; flex-shrink:0; }
+.stagehead h2{margin:0; font-size:1.3rem; color:var(--maroon);}
+.stage p.desc{line-height:1.55; opacity:.9; margin:0 0 18px;}
+.chips{display:flex; flex-wrap:wrap; gap:10px; margin:14px 0;}
+.chip{ border:2px solid var(--line); background:var(--cream); border-radius:30px; padding:10px 16px; font-weight:600; cursor:pointer; display:flex; gap:6px; align-items:center; font-size:.95rem; }
+.chip.got{border-color:var(--mint); background:var(--mint); color:#fff;}
+.pot{width:100%; max-width:150px; margin:10px auto; display:flex; justify-content:center;}
+.steam{animation:rise 2.2s ease-in-out infinite; transform-origin:center;}
+@keyframes rise{0%{opacity:0; transform:translateY(6px);}40%{opacity:.9;}100%{opacity:0; transform:translateY(-18px);}}
+.bar-wrap{background:var(--line); border-radius:20px; height:26px; overflow:hidden; position:relative; margin:16px 0;}
+.gradient{position:absolute; inset:0; background:linear-gradient(90deg,#F3D9A0 0%, #E8952B 45%, #B5651D 65%, #4A2A0E 100%);}
+.zone{position:absolute; top:0; bottom:0; background:rgba(255,255,255,.35); border-left:2px dashed #fff; border-right:2px dashed #fff;}
+.marker{position:absolute; top:-6px; width:6px; height:38px; background:var(--ink); border-radius:3px;}
+.rowbtns{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; align-items:center;}
+button.small{ border:1px solid var(--line); background:var(--cream); color:var(--ink); padding:9px 16px; border-radius:12px; font-weight:600; cursor:pointer; }
+button.small.primary{background:var(--maroon); color:#fff; border:none;}
+.feedback{margin-top:12px; font-weight:600; min-height:1.4em;}
+.feedback.good{color:var(--mint);} .feedback.bad{color:var(--chili);}
+.progressline{height:10px; background:var(--line); border-radius:6px; overflow:hidden; margin:14px 0;}
+.progressfill{height:100%; background:var(--saffron); width:0%; transition:width .2s linear;}
+.layerbtns{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:14px 0;}
+.layerbtns button{padding:16px 6px; border-radius:14px; border:2px solid var(--line); background:var(--cream); cursor:pointer; font-weight:600; font-size:.85rem;}
+.layerbtns button.picked{border-color:var(--mint); background:var(--mint); color:#fff;}
+.finalplate{text-align:center; margin:10px 0; display:flex; justify-content:center;}
+.confetti-piece{position:fixed; top:-10px; width:8px; height:14px; z-index:50; pointer-events:none;}
+.summary{background:var(--cream); border:1px dashed var(--line); border-radius:14px; padding:16px; margin-top:16px;}
+.summary h3{margin:0 0 8px; color:var(--maroon);}
+.summary ul{margin:0; padding-left:20px; line-height:1.6;}
+.rank-input{flex:1; min-width:140px; padding:9px 12px; border-radius:10px; border:1px solid var(--line); background:var(--card); color:var(--ink);}
+footer{text-align:center; opacity:.7; font-size:.85rem; padding:20px 0 4px;}
+footer a{color:var(--maroon);}
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topbar">
+    <div class="brand" id="brandIcon">🍛 Biryani Quest</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="pts" id="ptsLabel">0 spice pts</span>
+      <button class="iconbtn" id="boardBtn" title="Scoreboard">🏆</button>
+      <button class="iconbtn" id="soundBtn" title="Toggle sound">🔊</button>
+    </div>
+  </div>
+  <div class="dots" id="dots"></div>
+</header>
+
+<div class="wrap">
+  <section class="hero" id="heroSection">
+    <div class="icon-row" id="heroIcons"></div>
+    <h1>Cook Chicken Biryani, one playful task at a time</h1>
+    <p>Six real kitchen steps, turned into six quick games — marinate, fry, layer and dum-cook your way to a proper Chicken Biryani. Sound on for the full sizzle.</p>
+    <button class="cta" id="startBtn">Start Cooking →</button>
+  </section>
+
+  <section id="stageArea"></section>
+
+  <footer>
+    Recipe technique adapted from Swasthi's Chicken Biryani recipe — read the full method at
+    <a href="https://www.indianhealthyrecipes.com/chicken-biryani-recipe/" target="_blank" rel="noopener">indianhealthyrecipes.com</a>.
+    Illustrations are drawn in-page (no stock photos).
+  </footer>
+</div>
+
+<script>
+/* ================= SVG art (drawn, not photographed — keeps things copyright-safe) ================= */
+function svgDrumstick(w){
+  w=w||90;
+  return '<svg width="'+w+'" height="'+w+'" viewBox="-10 -15 130 130">'
+  +'<path d="M15 55 C0 45 -3 22 15 12 C28 4 48 8 55 22 C63 35 58 55 40 60 C33 62 22 60 15 55Z" fill="#C1780F" stroke="#7A3E12" stroke-width="3"/>'
+  +'<rect x="45" y="-8" width="11" height="28" rx="5.5" transform="rotate(35 50 5)" fill="#F3E6D0" stroke="#C9B48A" stroke-width="1.5"/>'
+  +'<path d="M20 30 q15 -6 28 3" stroke="#E8A34D" stroke-width="3" fill="none" opacity=".7"/>'
+  +'<path d="M15 45 q18 6 32 -2" stroke="#8A4A10" stroke-width="2" fill="none" opacity=".5"/>'
+  +'</svg>';
+}
+function svgOnion(w){
+  w=w||90;
+  return '<svg width="'+w+'" height="'+w+'" viewBox="0 0 100 100">'
+  +'<defs><radialGradient id="on" cx="40%" cy="35%"><stop offset="0" stop-color="#F6D28A"/><stop offset="1" stop-color="#C1440E"/></radialGradient></defs>'
+  +'<path d="M50 12 C68 12 82 30 78 50 C90 55 90 75 75 82 C78 90 68 95 60 90 C55 96 45 96 40 90 C32 95 22 90 25 82 C10 75 10 55 22 50 C18 30 32 12 50 12 Z" fill="url(#on)" stroke="#8A3308" stroke-width="2"/>'
+  +'<path d="M50 12 L50 90 M30 25 L45 88 M70 25 L55 88" stroke="#8A3308" stroke-width="1.5" opacity=".5"/>'
+  +'</svg>';
+}
+function grainEl(cx,cy,rot,color){
+  return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="5" ry="2.2" fill="'+color+'" transform="rotate('+rot+' '+cx+' '+cy+')"/>';
+}
+function svgRiceCluster(w){
+  w=w||90; var grains=''; var colors=['#F3E3B8','#EFD9A0','#E8C97A'];
+  for(var i=0;i<36;i++){
+    var ang=Math.random()*2*Math.PI, r=Math.random()*33;
+    var cx=50+Math.cos(ang)*r, cy=55+Math.sin(ang)*r*0.55;
+    grains+=grainEl(cx.toFixed(1),cy.toFixed(1),(Math.random()*180).toFixed(0),colors[i%3]);
+  }
+  return '<svg width="'+w+'" height="'+w+'" viewBox="0 0 100 100"><path d="M10 60 Q50 90 90 60 L85 68 Q50 88 15 68 Z" fill="#D9A94A" opacity=".25"/>'+grains+'</svg>';
+}
+function svgPotSteam(w){
+  w=w||90;
+  return '<svg width="'+w+'" height="'+w+'" viewBox="0 0 100 100">'
+  +'<path class="steam" d="M35 20 Q40 8 35 -4" stroke="#C9B48A" stroke-width="3" fill="none" style="animation-delay:0s"/>'
+  +'<path class="steam" d="M50 20 Q55 6 50 -6" stroke="#C9B48A" stroke-width="3" fill="none" style="animation-delay:.7s"/>'
+  +'<path class="steam" d="M65 20 Q70 8 65 -4" stroke="#C9B48A" stroke-width="3" fill="none" style="animation-delay:1.4s"/>'
+  +'<path d="M18 45 h64 v9 a32 24 0 0 1 -64 0 Z" fill="#8A8D91" stroke="#5C5F63" stroke-width="2"/>'
+  +'<ellipse cx="50" cy="45" rx="32" ry="8" fill="#6B6E72"/>'
+  +'<rect x="8" y="41" width="11" height="7" rx="3" fill="#5C5F63"/>'
+  +'<rect x="81" y="41" width="11" height="7" rx="3" fill="#5C5F63"/>'
+  +'</svg>';
+}
+function svgPotLayers(w){
+  w=w||90;
+  return '<svg width="'+w+'" height="'+w+'" viewBox="0 0 100 100">'
+  +'<path class="steam" d="M50 30 Q55 18 50 6" stroke="#C9B48A" stroke-width="3" fill="none"/>'
+  +'<path d="M18 45 h64 v9 a32 24 0 0 1 -64 0 Z" fill="#8A8D91" stroke="#5C5F63" stroke-width="2"/>'
+  +'<rect x="24" y="52" width="52" height="9" fill="#C1780F" opacity=".85"/>'
+  +'<rect x="24" y="61" width="52" height="11" fill="#F3E3B8"/>'
+  +'<rect x="24" y="72" width="52" height="6" fill="#4C7A5D" opacity=".6"/>'
+  +'</svg>';
+}
+function buildPlateSVG(){
+  var grains='', colors=['#F3E3B8','#EFD9A0','#E8C97A','#D9A94A'];
+  for(var i=0;i<130;i++){
+    var ang=Math.random()*2*Math.PI, r=Math.random()*95;
+    var cx=(150+Math.cos(ang)*r).toFixed(1), cy=(130+Math.sin(ang)*r*0.55).toFixed(1);
+    grains+=grainEl(cx,cy,(Math.random()*180).toFixed(0), colors[i%4]);
+  }
+  var saffron='';
+  for(var j=0;j<6;j++){
+    var x1=(80+Math.random()*140).toFixed(0), y1=(90+Math.random()*70).toFixed(0);
+    saffron+='<path d="M'+x1+' '+y1+' q10 -6 20 2 q10 8 22 0" stroke="#E8952B" stroke-width="2.5" fill="none" opacity=".7" stroke-linecap="round"/>';
+  }
+  var stick='<path d="M15 55 C0 45 -3 22 15 12 C28 4 48 8 55 22 C63 35 58 55 40 60 C33 62 22 60 15 55Z" fill="#C1780F" stroke="#7A3E12" stroke-width="2.5"/><rect x="45" y="-8" width="10" height="26" rx="5" transform="rotate(35 50 5)" fill="#F3E6D0" stroke="#C9B48A" stroke-width="1.5"/>';
+  var chicken='<g transform="translate(90,90) rotate(-12)">'+stick+'</g><g transform="translate(178,148) rotate(18) scale(0.92)">'+stick+'</g>';
+  var mint='<path d="M108 58 q6 -14 20 -10 q-4 14 -20 10Z" fill="#4C7A5D"/><path d="M192 188 q6 -14 20 -10 q-4 14 -20 10Z" fill="#4C7A5D"/>';
+  var onionStrands='<path d="M55 172 q20 -10 35 5" stroke="#8A3308" stroke-width="2" fill="none" opacity=".6"/><path d="M225 98 q-15 -12 -30 0" stroke="#8A3308" stroke-width="2" fill="none" opacity=".6"/>';
+  return '<svg width="280" height="245" viewBox="0 0 300 260">'
+  +'<ellipse cx="150" cy="130" rx="140" ry="105" fill="#FBF6EA" stroke="#EAD9BE" stroke-width="6"/>'
+  +'<ellipse cx="150" cy="130" rx="118" ry="88" fill="#FDF8EF"/>'
+  +grains+saffron+chicken+mint+onionStrands
+  +'</svg>';
+}
+
+/* ---------- audio ---------- */
+let actx=null, muted=false;
+function ac(){ if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return actx; }
+function tone(freq,dur,type,vol,delay){
+  if(muted) return; const c=ac(); if(!c) return;
+  type=type||'sine'; vol=vol==null?.18:vol; delay=delay||0;
+  const t0=c.currentTime+delay;
+  const o=c.createOscillator(), g=c.createGain();
+  o.type=type; o.frequency.setValueAtTime(freq,t0);
+  g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(vol,t0+0.02);
+  g.gain.exponentialRampToValueAtTime(0.001,t0+dur);
+  o.connect(g); g.connect(c.destination); o.start(t0); o.stop(t0+dur+0.05);
+}
+function chime(){ tone(523,.18,'sine',.2,0); tone(659,.18,'sine',.2,.12); tone(784,.25,'sine',.22,.24); }
+function pop(){ tone(300,.08,'triangle',.2,0); }
+function buzz(){ tone(160,.25,'sawtooth',.15,0); }
+function sizzle(dur){
+  dur=dur||0.9; if(muted) return; const c=ac(); if(!c) return;
+  const bufSize=c.sampleRate*dur; const buf=c.createBuffer(1,bufSize,c.sampleRate);
+  const data=buf.getChannelData(0);
+  for(let i=0;i<bufSize;i++){ data[i]=(Math.random()*2-1)*Math.pow(1-i/bufSize,1.5); }
+  const src=c.createBufferSource(); src.buffer=buf;
+  const filt=c.createBiquadFilter(); filt.type='highpass'; filt.frequency.value=2500;
+  const g=c.createGain(); g.gain.value=.25;
+  src.connect(filt); filt.connect(g); g.connect(c.destination); src.start();
+}
+document.getElementById('soundBtn').onclick=()=>{
+  muted=!muted; document.getElementById('soundBtn').textContent = muted? '🔇':'🔊'; ac();
+};
+
+/* ---------- shared scoreboard backend ----------
+   On claude.ai this uses the built-in db capability automatically.
+   Once you deploy this file to Vercel (or anywhere else), that capability
+   does not exist there — so it falls back to Supabase (free tier).
+   TO TURN ON THE PUBLIC SCOREBOARD AFTER DEPLOYING:
+   1. Create a free project at supabase.com
+   2. In the SQL editor, run:
+        create table public.scores (
+          id uuid default gen_random_uuid() primary key,
+          name text not null,
+          score int not null,
+          created_at timestamptz default now()
+        );
+        alter table public.scores enable row level security;
+        create policy "public read" on public.scores for select using (true);
+        create policy "public insert" on public.scores for insert with check (true);
+   3. Go to Project Settings -> API, copy the "Project URL" and the "anon public" key
+   4. Paste them into the two constants right below, then redeploy
+   Note: with the policies above, the board is fully public — anyone with the
+   link can read and add scores (same spirit as a public game leaderboard).
+--------------------------------------------------- */
+const SUPABASE_URL = 'https://jxmtheyramhoimtiwcgq.supabase.co/rest/v1/';        // e.g. 'https://xxxxx.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp4bXRoZXlyYW1ob2ltdGl3Y2dxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MDE4MTYsImV4cCI6MjEwNjA3NzgxNn0.X3oqZAIQn-k98vUcCiPRF0PSiFyMJHIn7rhleHynjeI';   // the "anon public" key from Supabase settings
+
+let backend=null, db=null, lbUnsub=null;
+(async function initBackend(){
+  if(window.claude && typeof window.claude.use==='function'){
+    try{ const d=await window.claude.use('db'); if(d){ db=d; backend='claudedb'; return; } }catch(e){}
+  }
+  if(SUPABASE_URL && SUPABASE_ANON_KEY){ backend='supabase'; }
+})();
+async function supaFetchBoard(limit){
+  const res=await fetch(SUPABASE_URL+'/rest/v1/scores?select=name,score&order=score.desc&limit='+limit,
+    { headers:{ apikey:SUPABASE_ANON_KEY, Authorization:'Bearer '+SUPABASE_ANON_KEY } });
+  if(!res.ok) throw new Error('fetch failed');
+  return res.json();
+}
+async function supaSubmit(name,score){
+  const res=await fetch(SUPABASE_URL+'/rest/v1/scores', {
+    method:'POST',
+    headers:{ apikey:SUPABASE_ANON_KEY, Authorization:'Bearer '+SUPABASE_ANON_KEY, 'Content-Type':'application/json', Prefer:'return=minimal' },
+    body: JSON.stringify({name, score})
+  });
+  return res.ok;
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function renderRankRows(rows){
+  const medals=['🥇','🥈','🥉'];
+  if(!rows.length) return '<p class="feedback">No cooks on the board yet — be the first!</p>';
+  return '<ol style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">' +
+    rows.map((r,i)=>'<li style="display:flex;justify-content:space-between;align-items:center;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:8px 14px;">'
+      +'<span>'+(medals[i]||('#'+(i+1)))+' '+escapeHtml(r.name||'Anonymous')+'</span>'
+      +'<span class="pts">'+(r.score==null?(r.points||0):r.score)+'/100</span></li>').join('') + '</ol>';
+}
+function loadLeaderboard(container, limit){
+  limit = limit || 10;
+  if(lbUnsub){ lbUnsub(); lbUnsub=null; }
+  if(backend==='claudedb'){
+    try{
+      const q=db.collection('leaderboard').orderBy('score','desc').limit(limit);
+      lbUnsub=q.onSnapshot(
+        snap=>{ container.innerHTML=renderRankRows(snap.docs.map(d=>d.data())); },
+        ()=>{ container.innerHTML='<p class="feedback bad">Could not load the ranking right now.</p>'; }
+      );
+    }catch(e){ container.innerHTML='<p class="feedback bad">Ranking unavailable right now.</p>'; }
+    return;
+  }
+  if(backend==='supabase'){
+    container.innerHTML='Loading…';
+    let stopped=false;
+    async function refresh(){
+      try{ const rows=await supaFetchBoard(limit); if(!stopped) container.innerHTML=rows.length? renderRankRows(rows) : '<p class="feedback">No cooks yet — play a round and add your score!</p>'; }
+      catch(e){ if(!stopped) container.innerHTML='<p class="feedback bad">Could not load the ranking right now.</p>'; }
+    }
+    refresh();
+    const iv=setInterval(refresh, 6000);
+    lbUnsub=()=>{ stopped=true; clearInterval(iv); };
+    return;
+  }
+  container.innerHTML='<p class="feedback">Public scoreboard isn\u2019t turned on yet for this deployment — add your Supabase URL &amp; key near the top of the script (see the code comment) to switch it on.</p>';
+}
+function submitScore(name, score){
+  if(backend==='claudedb') return db.collection('leaderboard').add({name:String(name).slice(0,24), score, ts:Date.now()}).catch(()=>{});
+  if(backend==='supabase') return supaSubmit(String(name).slice(0,24), score);
+  return Promise.resolve(false);
+}
+function computeScore(name){
+  const n=String(name||'').trim().toLowerCase();
+  if(n==='jaya') return 100;
+  return 1+Math.floor(Math.random()*49);
+}
+function scoreLine(score){
+  if(score>=90) return 'Absolute master chef! 🏆';
+  if(score>=50) return 'A very solid pot of biryani.';
+  if(score>=25) return 'Edible, but the onions needed more attention.';
+  return 'Back to the marinade, this one needs practice.';
+}
+let viewingSummary=false;
+function showScoreboard(){
+  if(lbUnsub){ lbUnsub(); lbUnsub=null; }
+  document.getElementById('heroSection').classList.add('hidden');
+  dotsWrap.classList.add('hidden');
+  stageArea.innerHTML =
+    '<div class="card">'
+    +'<h2 style="color:var(--maroon)">Cooks scoreboard</h2>'
+    +'<p class="desc">Everyone who has played this page and added their score, best first.</p>'
+    +'<div id="boardList">Loading…</div>'
+    +'<div class="rowbtns"><button class="small primary" id="boardBack">← Back</button></div>'
+    +'</div>';
+  loadLeaderboard(document.getElementById('boardList'), 50);
+  document.getElementById('boardBack').onclick=()=>{
+    dotsWrap.classList.remove('hidden');
+    if(viewingSummary){ renderFinalSummary(); }
+    else if(current>=0){ renderStage(current); }
+    else { if(lbUnsub){ lbUnsub(); lbUnsub=null; } stageArea.innerHTML=''; document.getElementById('heroSection').classList.remove('hidden'); }
+  };
+}
+document.getElementById('boardBtn').onclick=showScoreboard;
+
+/* ---------- state ---------- */
+let points = 0;
+try{ points = parseInt(localStorage.getItem('biryani_pts')||'0',10) || 0; }catch(e){}
+function addPts(n){ points+=n; document.getElementById('ptsLabel').textContent = points+' spice pts';
+  try{ localStorage.setItem('biryani_pts', String(points)); }catch(e){} }
+document.getElementById('ptsLabel').textContent = points+' spice pts';
+document.getElementById('heroIcons').innerHTML = svgDrumstick(56)+svgPotSteam(56)+svgRiceCluster(56);
+
+const stageArea = document.getElementById('stageArea');
+const dotsWrap = document.getElementById('dots');
+let current = -1;
+const completed = [false,false,false,false,false,false];
+
+const STAGES = [
+  {title:'Marinate the chicken'},
+  {title:'Rinse & soak the rice'},
+  {title:'Fry the onions golden'},
+  {title:'Cook the chicken low & slow'},
+  {title:'Layer & dum-cook'},
+  {title:'Plate it up'}
+];
+
+STAGES.forEach((s,i)=>{
+  const b=document.createElement('button');
+  b.className='dot'; b.title=s.title;
+  b.onclick=()=>{ if(completed[i] || i===current) renderStage(i); };
+  dotsWrap.appendChild(b);
+});
+function refreshDots(){
+  [...dotsWrap.children].forEach((d,i)=>{
+    d.classList.toggle('done', completed[i]);
+    d.classList.toggle('active', i===current);
+  });
+}
+
+document.getElementById('startBtn').onclick=()=>{
+  ac();
+  document.getElementById('heroSection').classList.add('hidden');
+  renderStage(0);
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+function goNext(){
+  if(current<5) renderStage(current+1);
+  else renderFinalSummary();
+}
+
+function renderStage(i){
+  current=i; viewingSummary=false; refreshDots();
+  const s=STAGES[i];
+  const wrap=document.createElement('div');
+  wrap.className='card stage';
+  wrap.innerHTML = '<div class="stagehead"><div class="num">'+(i+1)+'</div><h2>'+s.title+'</h2></div>';
+  stageArea.innerHTML=''; stageArea.appendChild(wrap);
+  [buildMarinate,buildRice,buildOnions,buildChicken,buildLayer,buildServe][i](wrap);
+}
+
+/* ---- Stage 1: Marinate ---- */
+function buildMarinate(wrap){
+  wrap.insertAdjacentHTML('beforeend',
+    '<p class="desc">Real biryani starts with the marinade. Yogurt tenderizes the chicken while ginger-garlic paste, warm ground spices and a squeeze of lemon work their way in. Tap each ingredient to add it to the bowl.</p>'
+    +'<div class="pot" id="mIcon">'+svgDrumstick(90)+'</div>'
+    +'<div class="chips" id="chips">'+['Plain yogurt','Ginger-garlic paste','Warm spices & salt','Chicken pieces'].map((n,idx)=>'<button class="chip" data-i="'+idx+'">'+n+'</button>').join('')+'</div>'
+    +'<div class="progressline"><div class="progressfill" id="mProg"></div></div>'
+    +'<div class="feedback" id="mFeed"></div>'
+  );
+  let got=0; const total=4;
+  wrap.querySelectorAll('#chips .chip').forEach(chip=>{
+    chip.onclick=()=>{
+      if(chip.classList.contains('got')) return;
+      chip.classList.add('got'); got++; pop();
+      wrap.querySelector('#mProg').style.width=(got/total*100)+'%';
+      if(got===total){
+        wrap.querySelector('#mFeed').textContent='Marinated! Resting it now so the flavors soak in…';
+        wrap.querySelector('#mFeed').className='feedback good';
+        setTimeout(()=>{
+          chime();
+          wrap.insertAdjacentHTML('beforeend',
+            '<div id="tasteBox"><p class="desc" style="margin-top:14px;">Dip a finger in and taste it — does it need anything?</p>'
+            +'<div class="rowbtns"><button class="small" data-t="salt">Add more salt</button><button class="small" data-t="chili">Add more chili</button><button class="small" data-t="good">It is just right</button></div>'
+            +'<div class="feedback" id="tFeed"></div></div>'
+          );
+          wrap.querySelectorAll('#tasteBox button').forEach(b=>{
+            b.onclick=()=>{
+              wrap.querySelectorAll('#tasteBox button').forEach(x=>x.disabled=true);
+              const tf=wrap.querySelector('#tFeed');
+              if(b.dataset.t==='good'){
+                chime(); addPts(10); tf.textContent='Good call — the marinade was already balanced.'; tf.className='feedback good';
+              } else {
+                buzz(); tf.textContent='A little fiddling that did not really need doing — but no harm done.'; tf.className='feedback bad';
+              }
+              addPts(5); completed[0]=true;
+              wrap.insertAdjacentHTML('beforeend','<div class="rowbtns"><button class="small primary" id="mNext">Rice, next →</button></div>');
+              wrap.querySelector('#mNext').onclick=goNext; refreshDots();
+            };
+          });
+        }, 900);
+      }
+    };
+  });
+}
+
+/* ---- Stage 2: Rice ---- */
+function buildRice(wrap){
+  wrap.insertAdjacentHTML('beforeend',
+    '<p class="desc">Aged basmati needs a good rinse to wash off the surface starch, then a soak so the grains cook up long and fluffy instead of clumping together.</p>'
+    +'<div class="pot">'+svgRiceCluster(90)+'</div>'
+    +'<div class="rowbtns"><button class="small primary" id="rinseBtn">Rinse rice (0/3)</button><button class="small" id="soakBtn" disabled>Soak rice</button></div>'
+    +'<div class="progressline"><div class="progressfill" id="rProg"></div></div>'
+    +'<div class="feedback" id="rFeed"></div>'
+  );
+  let rinses=0;
+  wrap.querySelector('#rinseBtn').onclick=()=>{
+    if(rinses>=3) return;
+    rinses++; sizzle(.3);
+    wrap.querySelector('#rinseBtn').textContent='Rinse rice ('+rinses+'/3)';
+    wrap.querySelector('#rProg').style.width=(rinses/3*50)+'%';
+    if(rinses===3){ wrap.querySelector('#rinseBtn').disabled=true; wrap.querySelector('#soakBtn').disabled=false;
+      wrap.querySelector('#rFeed').textContent='Nice and clear water — ready to soak.'; wrap.querySelector('#rFeed').className='feedback good'; }
+  };
+  wrap.querySelector('#soakBtn').onclick=()=>{
+    const btn=wrap.querySelector('#soakBtn'); btn.disabled=true; btn.textContent='Soaking…';
+    let p=50; const iv=setInterval(()=>{ p+=10; wrap.querySelector('#rProg').style.width=p+'%'; if(p>=100){ clearInterval(iv);
+      chime(); addPts(10); completed[1]=true;
+      wrap.querySelector('#rFeed').textContent='Soaked and drained — grains ready to fluff up perfectly.';
+      wrap.insertAdjacentHTML('beforeend','<div class="rowbtns"><button class="small primary" id="rNext">Fry onions →</button></div>');
+      wrap.querySelector('#rNext').onclick=goNext; refreshDots();
+    } }, 250);
+  };
+}
+
+/* ---- Stage 3: Onions timing game ---- */
+function buildOnions(wrap){
+  wrap.insertAdjacentHTML('beforeend',
+    '<p class="desc">Sliced onions go into hot ghee. Golden and light brown is the sweet spot — a few seconds past that and they turn bitter. Watch the pan and stop it right on time.</p>'
+    +'<div class="pot">'+svgOnion(90)+'</div>'
+    +'<div class="bar-wrap"><div class="gradient"></div><div class="zone" id="zone"></div><div class="marker" id="marker"></div></div>'
+    +'<div class="rowbtns"><button class="small primary" id="stopBtn">Stop frying!</button></div>'
+    +'<div class="feedback" id="oFeed"></div>'
+  );
+  const barWrap=wrap.querySelector('.bar-wrap');
+  const zoneEl=wrap.querySelector('#zone');
+  const zoneStart=48, zoneEnd=66;
+  requestAnimationFrame(()=>{ const w=barWrap.clientWidth; zoneEl.style.left=(w*zoneStart/100)+'px'; zoneEl.style.width=(w*(zoneEnd-zoneStart)/100)+'px'; });
+  let pos=0, dir=1, running=true; const marker=wrap.querySelector('#marker');
+  sizzle(3.5);
+  function step(){
+    if(!running) return;
+    pos+=dir*1.3; if(pos>=98){pos=98;dir=-1;} if(pos<=0){pos=0;dir=1;}
+    const w=barWrap.clientWidth; marker.style.left=(w*pos/100 - 3)+'px';
+    requestAnimationFrame(step);
+  }
+  step();
+  wrap.querySelector('#stopBtn').onclick=()=>{
+    if(!running) return; running=false;
+    const feed=wrap.querySelector('#oFeed');
+    if(pos>=zoneStart && pos<=zoneEnd){
+      chime(); addPts(20); feed.textContent='Golden and gorgeous — perfect fry.'; feed.className='feedback good';
+    } else if(pos<zoneStart){
+      buzz(); feed.textContent='Still pale — a little more time would help, but they will do.'; feed.className='feedback bad'; addPts(8);
+    } else {
+      buzz(); feed.textContent='A touch over — slightly bitter now, but still usable.'; feed.className='feedback bad'; addPts(8);
+    }
+    completed[2]=true;
+    wrap.insertAdjacentHTML('beforeend','<div class="rowbtns"><button class="small primary" id="oNext">Cook chicken →</button></div>');
+    wrap.querySelector('#oNext').onclick=goNext; refreshDots();
+  };
+}
+
+/* ---- Stage 4: Cook chicken ---- */
+function buildChicken(wrap){
+  wrap.insertAdjacentHTML('beforeend',
+    '<p class="desc">Marinated chicken joins the golden onions, gets covered, and cooks low and slow until tender — finished with a spoon of yogurt, chili and fresh mint.</p>'
+    +'<div class="pot" id="potIcon">'+svgPotSteam(90)+'</div>'
+    +'<div class="rowbtns"><button class="small primary" id="coverBtn">Cover & simmer</button></div>'
+    +'<div class="progressline"><div class="progressfill" id="cProg"></div></div>'
+    +'<div class="feedback" id="cFeed"></div>'
+  );
+  wrap.querySelector('#coverBtn').onclick=()=>{
+    const btn=wrap.querySelector('#coverBtn'); btn.disabled=true; btn.textContent='Simmering…';
+    sizzle(2.5);
+    let p=0; const iv=setInterval(()=>{ p+=8; wrap.querySelector('#cProg').style.width=p+'%';
+      if(p>=100){ clearInterval(iv);
+        wrap.querySelector('#cFeed').textContent='Smells ready — go on, check with a fork.';
+        wrap.insertAdjacentHTML('beforeend','<div class="rowbtns"><button class="small primary" id="forkBtn">Check with a fork</button></div>');
+        wrap.querySelector('#forkBtn').onclick=()=>{
+          chime(); addPts(15); completed[3]=true;
+          wrap.querySelector('#cFeed').textContent='Tender and cooked through — stir in yogurt, chili and mint.';
+          wrap.querySelector('#cFeed').className='feedback good';
+          wrap.insertAdjacentHTML('beforeend','<div class="rowbtns"><button class="small primary" id="cNext">Layer it →</button></div>');
+          wrap.querySelector('#cNext').onclick=goNext; refreshDots();
+        };
+      }
+    }, 180);
+  };
+}
+
+/* ---- Stage 5: Layer & dum ---- */
+function buildLayer(wrap){
+  wrap.insertAdjacentHTML('beforeend',
+    '<p class="desc">This is the heart of biryani. Tap the layers in the right order — chicken settles at the bottom, rice blankets the top, then mint, saffron milk and fried onions finish it. Seal the pot and let steam do the rest.</p>'
+    +'<div class="pot" id="layerPot">'+svgPotLayers(90)+'</div>'
+    +'<div class="layerbtns" id="layerBtns"><button data-l="chicken">Chicken</button><button data-l="rice">Rice</button><button data-l="toppings">Toppings</button></div>'
+    +'<div class="feedback" id="lFeed">Tap in order: chicken, then rice, then toppings.</div>'
+    +'<div class="rowbtns hidden" id="sealRow"><button class="small primary" id="sealBtn">Seal & dum-cook</button></div>'
+    +'<div class="progressline hidden" id="dumProg"><div class="progressfill" id="dumFill"></div></div>'
+  );
+  const order=['chicken','rice','toppings']; let idx=0;
+  wrap.querySelectorAll('#layerBtns button').forEach(btn=>{
+    btn.onclick=()=>{
+      if(btn.classList.contains('picked')) return;
+      if(btn.dataset.l===order[idx]){
+        btn.classList.add('picked'); pop(); idx++;
+        if(idx===3){
+          wrap.querySelector('#lFeed').textContent='Beautifully layered. Ready to seal the pot.';
+          wrap.querySelector('#lFeed').className='feedback good';
+          wrap.querySelector('#sealRow').classList.remove('hidden');
+        }
+      } else {
+        buzz();
+        wrap.querySelector('#lFeed').textContent='Not quite that order — chicken goes down first.';
+        wrap.querySelector('#lFeed').className='feedback bad';
+      }
+    };
+  });
+  wrap.querySelector('#sealBtn').onclick=()=>{
+    const btn=wrap.querySelector('#sealBtn'); btn.disabled=true; btn.textContent='Steaming…';
+    wrap.querySelector('#dumProg').classList.remove('hidden');
+    wrap.querySelector('#layerPot').innerHTML=svgPotSteam(90);
+    sizzle(3);
+    let p=0; const iv=setInterval(()=>{ p+=6; wrap.querySelector('#dumFill').style.width=p+'%';
+      if(p>=100){ clearInterval(iv); chime(); addPts(25); completed[4]=true;
+        wrap.querySelector('#lFeed').textContent='Steam has done its magic — the rice has curled and taken on all the flavor.';
+        wrap.insertAdjacentHTML('beforeend','<div class="rowbtns"><button class="small primary" id="lNext">Serve it →</button></div>');
+        wrap.querySelector('#lNext').onclick=goNext; refreshDots();
+      }
+    }, 150);
+  };
+}
+
+/* ---- Stage 6: Serve ---- */
+function buildServe(wrap){
+  wrap.insertAdjacentHTML('beforeend',
+    '<p class="desc">Fluff gently with a fork so every serving gets rice from the top and chicken from the bottom — tap the fork exactly 5 times before the timer runs out.</p>'
+    +'<div class="pot">'+svgPotLayers(90)+'</div>'
+    +'<div class="rowbtns"><button class="small primary" id="fluffBtn">🍴 Fluff (0/5)</button></div>'
+    +'<div class="progressline"><div class="progressfill" id="fluffProg"></div></div>'
+    +'<div class="feedback" id="fluffFeed"></div>'
+    +'<div id="garnishBox" class="hidden"></div>'
+  );
+  let taps=0, timeLeft=4, done=false;
+  const fluffBtn=wrap.querySelector('#fluffBtn');
+  const timer=setInterval(()=>{
+    timeLeft-=0.2; wrap.querySelector('#fluffProg').style.width=(100-(timeLeft/4*100))+'%';
+    if(timeLeft<=0 && !done){ clearInterval(timer); finishFluff(); }
+  }, 200);
+  fluffBtn.onclick=()=>{
+    if(done) return;
+    taps++; pop(); fluffBtn.textContent='🍴 Fluff ('+Math.min(taps,5)+'/5)';
+    if(taps>=5){ clearInterval(timer); finishFluff(); }
+  };
+  function finishFluff(){
+    done=true; fluffBtn.disabled=true;
+    const ff=wrap.querySelector('#fluffFeed');
+    if(taps===5){ ff.textContent='Perfectly fluffed — light, separate grains.'; ff.className='feedback good'; }
+    else if(taps<5){ ff.textContent='A bit under-fluffed, some grains stuck together — still tasty though.'; ff.className='feedback bad'; }
+    else { ff.textContent='A touch over-fluffed, some grains broke — still tasty though.'; ff.className='feedback bad'; }
+    showGarnish();
+  }
+  function showGarnish(){
+    const box=wrap.querySelector('#garnishBox'); box.classList.remove('hidden');
+    box.innerHTML='<div class="chips" id="garnish">'+['Fried onions','Fresh mint','Saffron milk'].map((n,i)=>'<button class="chip" data-i="'+i+'">'+n+'</button>').join('')+'</div>'
+      +'<div class="finalplate" id="finalPlate"></div>'
+      +'<div class="rowbtns"><button class="small primary" id="serveBtn" disabled>Serve the biryani!</button></div>';
+    let got=0;
+    box.querySelectorAll('#garnish .chip').forEach(c=>{
+      c.onclick=()=>{ if(c.classList.contains('got'))return; c.classList.add('got'); got++; pop();
+        if(got===3) box.querySelector('#serveBtn').disabled=false; };
+    });
+    box.querySelector('#serveBtn').onclick=()=>{
+      chime(); addPts(15); completed[5]=true; refreshDots();
+      box.querySelector('#finalPlate').innerHTML=buildPlateSVG();
+      launchConfetti();
+      setTimeout(renderFinalSummary, 900);
+    };
+  }
+}
+
+function renderFinalSummary(){
+  viewingSummary=true;
+  stageArea.innerHTML =
+    '<div class="card">'
+    +'<h2 style="color:var(--maroon)">Chicken Biryani, done. 🎉</h2>'
+    +'<div class="finalplate">'+buildPlateSVG()+'</div>'
+    +'<p class="desc">You marinated, fried, simmered, layered and dum-cooked your way to a proper biryani — the same steps a real pot goes through on the stove.</p>'
+    +'<p class="pts">'+points+' spice points earned along the way</p>'
+    +'<div class="summary">'
+      +'<h3>Get your biryani score</h3>'
+      +'<p style="margin:0 0 10px;opacity:.8;font-size:.9rem">Enter your name to see how this batch scored, out of 100.</p>'
+      +'<div class="rowbtns"><input id="nameInput" class="rank-input" placeholder="Your name" maxlength="24"><button class="small primary" id="revealScoreBtn">See my score</button></div>'
+      +'<div id="scoreReveal"></div>'
+    +'</div>'
+    +'<div class="summary">'
+      +'<h3>Cooks ranking</h3>'
+      +'<p style="margin:0 0 10px;opacity:.8;font-size:.9rem">Visible to others who open this page in your workspace.</p>'
+      +'<div id="rankList" style="margin-top:4px;">Loading ranking…</div>'
+    +'</div>'
+    +'<div class="summary">'
+      +'<h3>Quick reference — homestyle one-pot method</h3>'
+      +'<ul>'
+        +'<li>Marinate ½kg chicken in yogurt, ginger-garlic paste, chili powder, turmeric & garam masala; rest 1hr+.</li>'
+        +'<li>Rinse & soak 2 cups aged basmati for 30 min.</li>'
+        +'<li>Fry sliced onion in ghee until light golden, then cook marinated chicken covered until tender.</li>'
+        +'<li>Stir in extra yogurt, mint & chili; spread evenly, then layer the drained rice on top.</li>'
+        +'<li>Pour in hot salted water, cover, and cook ~15 min (or 1 whistle in a cooker); rest, then fluff.</li>'
+      +'</ul>'
+    +'</div>'
+    +'<div class="rowbtns" style="margin-top:16px;"><button class="small primary" id="restartBtn">Cook it again</button></div>'
+    +'</div>';
+  const rankList=document.getElementById('rankList');
+  loadLeaderboard(rankList);
+  document.getElementById('revealScoreBtn').onclick=()=>{
+    const nameInput=document.getElementById('nameInput');
+    const name=(nameInput.value||'').trim() || 'Anonymous';
+    const revealBtn=document.getElementById('revealScoreBtn');
+    revealBtn.disabled=true; nameInput.disabled=true;
+    const score=computeScore(name);
+    chime();
+    const box=document.getElementById('scoreReveal');
+    box.innerHTML='<div style="text-align:center;margin-top:14px;">'
+      +'<div class="display" style="font-size:3rem;font-weight:800;color:var(--chili);">'+score+'<span style="font-size:1.2rem;opacity:.6;">/100</span></div>'
+      +'<p style="margin:4px 0 14px;">'+scoreLine(score)+'</p>'
+      +'<div class="rowbtns" style="justify-content:center;"><button class="small primary" id="submitScoreBtn">Add to ranking</button></div>'
+      +'</div>';
+    document.getElementById('submitScoreBtn').onclick=()=>{
+      const b=document.getElementById('submitScoreBtn'); b.disabled=true; b.textContent='Added!';
+      submitScore(name, score).then(()=>{ chime(); });
+    };
+  };
+  document.getElementById('restartBtn').onclick=()=>{
+    if(lbUnsub){ lbUnsub(); lbUnsub=null; }
+    viewingSummary=false;
+    completed.fill(false); current=-1; refreshDots();
+    stageArea.innerHTML=''; document.getElementById('heroSection').classList.remove('hidden');
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+}
+
+function launchConfetti(){
+  const colors=['#E8952B','#C1440E','#4C7A5D','#6B1E2B'];
+  for(let i=0;i<40;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left=Math.random()*100+'vw';
+    p.style.background=colors[i%colors.length];
+    p.style.transform='rotate('+(Math.random()*360)+'deg)';
+    p.style.transition='transform '+(1.2+Math.random())+'s linear, top '+(1.2+Math.random())+'s linear';
+    document.body.appendChild(p);
+    requestAnimationFrame(()=>{
+      p.style.top='105vh'; p.style.transform+=' translateX('+(Math.random()*80-40)+'px)';
+    });
+    setTimeout(()=>p.remove(), 2400);
+  }
+}
+</script>
+</body>
+</html>
